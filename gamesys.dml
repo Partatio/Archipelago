@@ -1,0 +1,120 @@
+DML1
+
+#script "squirrel"
+
+CreateArch "Misc Metaprops" "APPlayerScripts" 
+{
+	+ObjProp "Scripts" 
+	{
+	"Script 0" "PlayerScripts"
+	"Don't Inherit" false
+	}
+}
++MetaProp "The Player" "APPlayerScripts"
+
+
+CreateArch "Goodies" "APLocation"
+{
+	+ObjProp "ModelName" 
+	{
+	"" "plantc"
+	}
+	+ObjProp "PsiRadar"
+	{
+	"" "Powerup"
+	}
+	+ObjProp "FrobInfo"
+	{
+	"World Action" "Script"
+	"Inv Action" ""
+	"Tool Action" ""
+	}
+	+ObjProp "VoiceIdx"
+	{
+	"" 0
+	}
+}
+
+CreateArch "Misc Metaprops" "APLocationScripts"
+{
+	+ObjProp "Scripts"
+	{
+	"Script 0" "APLocationFuncs"
+	}
+}
++MetaProp "APLocation" "APLocationScripts"
+
+
+CreateArch "Object" "APLocationTracker"
+{
+	+ObjProp "RenderType"
+	{
+	"" "Not Rendered"
+	}
+}
+
+CreateArch "APLocation" "APLLovesense1"
+{
+	+ObjProp "VoiceIdx"
+	{
+	"" 1901
+	}
+}
+
+CreateArch "APLocation" "APLLovesense2"
+{
+	+ObjProp "VoiceIdx"
+	{
+	"" 1902
+	}
+}
+
+CreateArch "APLocation" "APLLovesense3"
+{
+	+ObjProp "VoiceIdx"
+	{
+	"" 1903
+	}
+}
+
+CreateArch "APLocation" "APLLovesense4"
+{
+	+ObjProp "VoiceIdx"
+	{
+	"" 1904
+	}
+}
+
+CreateArch "Trainers" "CybModShop"
+{
+	+ObjProp "ModelName" 
+	{
+	"" "corm_ric"
+	}
+	+ObjProp "FrobInfo"
+	{
+	"World Action" "Script"
+	}
+}
+
+CreateArch "Misc Metaprops" "CybModShopScripts"
+{
+	+ObjProp "Scripts"
+	{
+	"Script 0" "CybModShop"
+	}
+}
++MetaProp "CybModShop" "CybModShopScripts"
+
+CreateArch "Tripwire" "itemrestrictor"
+{
+}
+
+CreateArch "Misc Metaprops" "itemrestrictorscripts"
+{
+	+ObjProp "Scripts" 
+	{
+	"Script 0" "itemrestrictorfuncs"
+	}
+}
++MetaProp "itemrestrictor" "itemrestrictorscripts"
