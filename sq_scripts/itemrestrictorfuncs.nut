@@ -2,7 +2,8 @@ class itemrestrictorfuncs extends SqRootScript
 {
     function OnPhysEnter()
         {
-            SendMessage("Player", "ItemsUnrestrticted");
+            print("oaugh");
+            SendMessage(Networking.FirstPlayer(), "ItemsUnrestrticted");
             Object.Destroy(self);
         }
 }

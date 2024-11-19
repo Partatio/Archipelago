@@ -21,32 +21,42 @@ class PlayerScripts extends SqRootScript
 			switch (command)
 				{
 				case "placeaploc":
+					{
 					local NewAPLocation = Object.Create("APLocation");
 					Property.Set(NewAPLocation, "VoiceIdx", "", data[2]);
 					if (type(data[1]) == type([]))
 					{
-						local chosencontainer = data[1][rand() % data[1].len()];
-						Container.Add(NewAPLocation, chosencontainer);
+						local chosencontainer = data[1][ShockGame.RandRange(0, data[1].len() - 1)];
+						Property.SetSimple(NewAPLocation, "HasRefs", FALSE);
+						Link.Create(linkkind("Contains"), chosencontainer, NewAPLocation);
 					}
 					else
 						Object.Teleport(NewAPLocation, data[1], vector());
-					Link.Create("Target", NewTracker, NewAPLocation); #Link to object, EveryLoad send a message called CollectedItemsUpdate to whatever the tracker is linked to with the data being the sent items string
+					Link.Create("Mutate", NewTracker, NewAPLocation); #Link to object, EveryLoad send a message called CollectedItemsUpdate to whatever the tracker is linked to with the data being the sent items string
 					if (data[3])
 						Object.Destroy(data[3]);
 					continue;
+					}
 				case "replaceCybModShop":
+					{
 					foreach (Terminal in data[1])
 						Object.Destroy(Terminal);
 					local CybModShop = Object.Create("CybModShop");
 					Object.Teleport(CybModShop, data[2], vector(0, 0, 0));
 					continue;
+					}
 				case "destroy":
+					{
 					Object.Destroy(data[1]);
 					continue;
+					}
 				case "slayvictoryprop": #add script to last script slot on many or shodan that on slay sends a victory location out.  both bosses have scripts in slot 0 and 1.
+					{
 					Property.Set(data[1], "Scripts", "Script 3", "OnSlayVictory");
 					continue;
+					}
 				case "randomizerepl": #randomize a repl with random items and costs.
+					{
 					local ReplItem = PickUnhackedReplItem();
 					Property.Set(data[1], "RepContents", "Obj 1 Name", ReplItem[0]);
 					Property.Set(data[1], "RepContents", "Obj 1 Cost", ReplItem[1]);
@@ -59,20 +69,22 @@ class PlayerScripts extends SqRootScript
 					ReplItem = PickUnhackedReplItem();
 					Property.Set(data[1], "RepContents", "Obj 4 Name", ReplItem[0]);
 					Property.Set(data[1], "RepContents", "Obj 4 Cost", ReplItem[1]);
-					ReplItem = PickhackedReplItem();
+					ReplItem = PickHackedReplItem();
 					Property.Set(data[1], "RepHacked", "Obj 1 Name", ReplItem[0]);
 					Property.Set(data[1], "RepHacked", "Obj 1 Cost", ReplItem[1]);
-					ReplItem = PickhackedReplItem();
+					ReplItem = PickHackedReplItem();
 					Property.Set(data[1], "RepHacked", "Obj 2 Name", ReplItem[0]);
 					Property.Set(data[1], "RepHacked", "Obj 2 Cost", ReplItem[1]);
-					ReplItem = PickhackedReplItem();
+					ReplItem = PickHackedReplItem();
 					Property.Set(data[1], "RepHacked", "Obj 3 Name", ReplItem[0]);
 					Property.Set(data[1], "RepHacked", "Obj 3 Cost", ReplItem[1]);
-					ReplItem = PickhackedReplItem();
+					ReplItem = PickHackedReplItem();
 					Property.Set(data[1], "RepHacked", "Obj 4 Name", ReplItem[0]);
 					Property.Set(data[1], "RepHacked", "Obj 4 Cost", ReplItem[1]);
 					continue;
+					}
 				case "lovesense": #changes lovesense objects to aplocations with set ids.  ids can be changed in the gamesys
+					{
 					Property.Set(240, "RepContents", "Obj 1 Name", "APLLovesense1");
 					Property.Set(240, "RepContents", "Obj 2 Name", "APLLovesense2");
 					Property.Set(240, "RepContents", "Obj 3 Name", "APLLovesense3");
@@ -82,57 +94,79 @@ class PlayerScripts extends SqRootScript
 					Property.Set(240, "RepHacked", "Obj 3 Name", "APLLovesense3");
 					Property.Set(240, "RepHacked", "Obj 4 Name", "APLLovesense4");
 					continue;
+					}
+				case "command1repl": #changes command1s first hacked item to a location, this is to replace the resonator.  id changeable in gamesys
+					{
+					Property.Set(394, "RepHacked", "Obj 1 Name", "APLCommand1");
+					Property.Set(394, "RepHacked", "Obj 1 Cost", 100);
+					continue
+					}
 				case "setcareer":
+					{
 					Property.SetSimple(self, "CharGenYear", 2);
 					continue;
+					}
 				case "resetchar":
-					Property.Set("Player", "BaseStatsDesc", "STR",1);
-					Property.Set("Player", "BaseStatsDesc", "AGI",1);
-					Property.Set("Player", "BaseStatsDesc", "CYB",1);
-					Property.Set("Player", "BaseWeaponDesc", "Conventional",0);
-					Property.Set("Player", "BaseTechDesc", "Repair",0);
-					Property.SetSimple("Player", "PsiPowerDesc",0);
-					Property.SetSimple("Player", "PsiPower2Desc",0);
-					ShockGame.RecalcStats("Player");
+					{
+					Property.Set(Networking.FirstPlayer(), "BaseStatsDesc", "STR",1);
+					Property.Set(Networking.FirstPlayer(), "BaseStatsDesc", "AGI",1);
+					Property.Set(Networking.FirstPlayer(), "BaseStatsDesc", "CYB",1);
+					Property.Set(Networking.FirstPlayer(), "BaseWeaponDesc", "Conventional",0);
+					Property.Set(Networking.FirstPlayer(), "BaseTechDesc", "Repair",0);
+					Property.SetSimple(Networking.FirstPlayer(), "PsiPowerDesc",0);
+					Property.SetSimple(Networking.FirstPlayer(), "PsiPower2Desc",0);
+					ShockGame.RecalcStats(Networking.FirstPlayer());
 					continue; #taken from RoSoDudes alternate start mod
+					}
 				case "skipstation":
+					{
 					Object.Teleport(self, vector(56.5, -20, -9), vector(0, 0, 0));
 					continue; #teleport player to level end tripwire, only do after "setcareer"
-				case "medsci1trip":
-					local ItemTrip = Object.Create("itemrestrictor"); #Created tripwires seem to have a lot more properties set, I don't think they are important, as long as this tripwire is in the level items should not be spawned in medsci1.
-					Property.Set(ItemTrip, "PhysDims", "Size", Vector(4, 4, 4));
-					Property.Set(ItemTrip, "PhysState", "Location", Vector(46.98, -102.54, -15.23));
-					Property.SetSimple(ItemTrip, "Scale", Vector(10.02, 1.44, 2.37));
-					Object.Teleport(ItemTrip, Vector(46.98, -102.54, -15.23), Vector(0, 0, 0));
-					continue;
-				case "medsci1replpsihypo": #put a psi hypo in the security crate in the circular room with xerxes in both the unhacked and hacked.  This is to avoid softlocks where psi is required to get a location.
-					Property.Set(300, "RepContents", "Obj 1 Name", "Psi Booster");
-					Property.Set(300, "RepHacked", "Obj 1 Name", "Psi Booster");
-					continue;
-				case "skipearth": #skip the first level of the game by teleporting the player to a tripwire, required to not have tutorial setting on
-						Object.Teleport(self, vector(6.8, 170.5, 64.6), vector(0, 0, 0))
-					continue;
-				case "randomizeenemy": #destroy data[0] enemy if that field isnt set to 0.  Get the correct tier array based on data[1].  choose a random enemy from that, then create it and teleport it to data[2] with the original enemies properties if there was one.
-					local enemytier = VariousDataTables.enemytables.rawget(data[1]); #array of enemies based on spawn tier
-					local chosenenemy = enemytier[rand() % enemytier.len()];
-					local newenemy = Object.Create(chosenenemy);
-					if (data[0] != 0)#lots of this was taken from Sarge945s rando
+					}
+				case "itemrestrictorapl": #creates an APLocation at location data[1], with Locid data[2], and a script that sends a message to the player to start sending items.  does not link to APlocationTracker.  Used on medsci1 to stop items from spawning.
 					{
-						local enemyfacing = Property.Get(data[0], "PhysState", "Facing")
+					local NewAPLocation = Object.Create("APLocation");
+					Property.Set(NewAPLocation, "VoiceIdx", "", data[2]);
+					Object.Teleport(NewAPLocation, data[1], vector());
+					Property.Set(NewAPLocation, "Scripts", "Script 0", "ItemUnrestrict");
+					continue;
+					}
+				case "medsci1replpsihypo": #put a psi hypo in the security crate in the circular room with xerxes in both the unhacked and hacked.  This is to avoid softlocks where psi is required to get a location.
+					{
+					Property.Set(300, "RepContents", "Obj 1 Name", "Psi Booster");
+					Property.Set(300, "RepContents", "Obj 1 Cost", ShockGame.RandRange(50, 90));
+					Property.Set(300, "RepHacked", "Obj 1 Name", "Psi Booster");
+					Property.Set(300, "RepHacked", "Obj 1 Cost", ShockGame.RandRange(35, 65));
+					continue;
+					}
+				case "skipearth": #skip the first level of the game by teleporting the player to a tripwire, required to not have tutorial setting on
+					{
+					Object.Teleport(self, vector(6.8, 170.5, 64.6), vector(0, 0, 0))
+					continue;
+					}
+				case "randomizeenemy": #destroy data[1] enemy if that field isnt set to 0.  Get the correct tier array based on data[2].  choose a random enemy from that, then create it and teleport it to data[3] with the original enemies properties if there was one.
+					{
+					local enemytier = VariousDataTables.enemytables.rawget(data[2]); #array of enemies based on spawn tier
+					local chosenenemy = enemytier[ShockGame.RandRange(0, enemytier.len() - 1)];
+					local newenemy = Object.Create(chosenenemy);
+					local enemyfacing = vector();
+					if (data[1] != 0)#lots of this was taken from Sarge945s rando
+					{
+						enemyfacing = Property.Get(data[1], "PhysState", "Facing");
 
-						CopyMetaprop(data[0], newenemy, "Docile");
-						CopyMetaprop(data[0], newenemy, "Patrolling");
-						CopyMetaprop(data[0], newenemy, "Silent");
-						CopyMetaprop(data[0], newenemy, "Deaf");
-						CopyMetaprop(data[0], newenemy, "Posing");
-						CopyMetaprop(data[0], newenemy, "Blind");
+						CopyMetaProp(data[1], newenemy, "Docile");
+						CopyMetaProp(data[1], newenemy, "Patrolling");
+						CopyMetaProp(data[1], newenemy, "Silent");
+						CopyMetaProp(data[1], newenemy, "Deaf");
+						CopyMetaProp(data[1], newenemy, "Posing");
+						CopyMetaProp(data[1], newenemy, "Blind");
 
-						Property.CopyFrom(newenemy, "EcoType", data[0]);
+						Property.CopyFrom(newenemy, "EcoType", data[1]);
 
 						#For turrets, copy over hack difficulty
-						Property.CopyFrom(newenemy, "HackDiff", data[0]);
-						Property.CopyFrom(newenemy, "RepairDiff", data[0]);
-						Property.CopyFrom(newenemy, "AmbientHacked", data[0]);
+						Property.CopyFrom(newenemy, "HackDiff", data[1]);
+						Property.CopyFrom(newenemy, "RepairDiff", data[1]);
+						Property.CopyFrom(newenemy, "AmbientHacked", data[1]);
 
 						//Remove friendly (fixes issue with Repairman)
 						Object.RemoveMetaProperty(newenemy, "Good Guy");
@@ -141,117 +175,125 @@ class PlayerScripts extends SqRootScript
 						Property.SetSimple(newenemy, "HitPoints", Property.Get(newenemy, "MAX_HP"));
 
 						//Copy over AI Properties
-						Property.CopyFrom(newenemy, "AI_Fidget", data[0]);
-						Property.CopyFrom(newenemy, "AI_Patrol", data[0]);
-						Property.CopyFrom(newenemy, "AI_PtrlRnd", data[0]);
-						Property.CopyFrom(newenemy, "AI_Mode", data[0]);
-						Property.CopyFrom(newenemy, "AI_Alertness", data[0]);
-						Property.CopyFrom(newenemy, "AI_Efficiency", data[0]);
+						Property.CopyFrom(newenemy, "AI_Fidget", data[1]);
+						Property.CopyFrom(newenemy, "AI_Patrol", data[1]);
+						Property.CopyFrom(newenemy, "AI_PtrlRnd", data[1]);
+						Property.CopyFrom(newenemy, "AI_Mode", data[1]);
+						Property.CopyFrom(newenemy, "AI_Alertness", data[1]);
+						Property.CopyFrom(newenemy, "AI_Efficiency", data[1]);
 
 						//Copy Multiplayer Handoff (maybe not needed)
-						Property.CopyFrom(newenemy, "AI_NoHandoff", data[0]);
+						Property.CopyFrom(newenemy, "AI_NoHandoff", data[1]);
 
 						//Set Idling Directions (maybe not needed)
-						Property.CopyFrom(newenemy, "AI_IdleDirs", data[0]);
+						Property.CopyFrom(newenemy, "AI_IdleDirs", data[1]);
 
 						//Set Idling Return to Origin (maybe not needed)
-						Property.CopyFrom(newenemy, "AI_IdlRetOrg", data[0]);
+						Property.CopyFrom(newenemy, "AI_IdlRetOrg", data[1]);
 
 						//Copying Signal and Alert Responses
-						Property.CopyFrom(newenemy, "AI_SigRsp", data[0]);
-						Property.CopyFrom(newenemy, "AI_AlrtRsp", data[0]);
+						Property.CopyFrom(newenemy, "AI_SigRsp", data[1]);
+						Property.CopyFrom(newenemy, "AI_AlrtRsp", data[1]);
 
 						//Copy transparency (for Shodan level)
-						Property.CopyFrom(newenemy, "LBAlpha", data[0]);
-						Property.CopyFrom(newenemy, "ExtraLight", data[0]);
+						Property.CopyFrom(newenemy, "LBAlpha", data[1]);
+						Property.CopyFrom(newenemy, "ExtraLight", data[1]);
 
-						copyLinks(data[0], newenemy,"SwitchLink");
-						copyLinks(data[0], newenemy,"~SwitchLink");
-						copyLinks(data[0], newenemy,"Target");
-						copyLinks(data[0], newenemy,"~Target");
-						copyLinks(data[0], newenemy,"Contains");
-						copyLinks(data[0], newenemy,"~Contains");
+						CopyLinks(data[1], newenemy,"SwitchLink");
+						CopyLinks(data[1], newenemy,"~SwitchLink");
+						CopyLinks(data[1], newenemy,"Target");
+						CopyLinks(data[1], newenemy,"~Target");
+						CopyLinks(data[1], newenemy,"Contains");
+						CopyLinks(data[1], newenemy,"~Contains");
 
-						FixProjectiles(enemy);
+						FixProjectiles(newenemy);
 
-						local enemyname = Object.GetName(data[0]);
-						Object.SetName(data[0], "temp" + data[0]);
-						Object.Destroy(data[0]);
+						local enemyname = Object.GetName(data[1]);
+						Object.SetName(data[1], "temp" + data[1]);
+						Object.Destroy(data[1]);
 						Object.SetName(newenemy, enemyname)
 					}
-					else
-					{
-						local enemyfacing = vector(0, 0, 0)
-					}
-					Object.Teleport(newenemy, data[2], enemyfacing);
+					Object.Teleport(newenemy, data[3], enemyfacing);
 					if (chosenenemy == "Wall Pod" || chosenenemy == "Swarmer Floor Pod" || chosenenemy == "Grub Floor Pod")
 						{
 						local podtrip = Object.Create("Floor Egg Tripwire");
 						Property.SetSimple(podtrip, "Scale", vector(3, 3, 2));
 						Link.Create("SwitchLink", podtrip, newenemy);
-						Object.Teleport(podtrip, data[2], vector(0, 0, 0));
+						Object.Teleport(podtrip, data[3], vector(0, 0, 0));
 						}
 					continue;
-				case "directmonstergenrando":#change the enemy a DirectMonsterGen gotten from data[0] spawns to an enemy chosen randomly from a tier table based on data[1]
-					local enemytier = EnemyTables.enemytabs.rawget(data[1]); #array of enemies based on spawn tier
-					local chosenenemy = enemytier[rand() % enemytier.len()];
-					Property.Set(data[0], "Spawn", "Type 1", chosenenemy);
-					Property.Set(data[0], "Spawn", "Type 2", "");
-					Property.Set(data[0], "Spawn", "Type 3", "");
-					Property.Set(data[0], "Spawn", "Type 4", "");
-					Property.Set(data[0], "Spawn", "Rarity 1", 100);
-					Property.Set(data[0], "Spawn", "Rarity 2", 0);
-					Property.Set(data[0], "Spawn", "Rarity 3", 0);
-					Property.Set(data[0], "Spawn", "Rarity 4", 0);
+					}
+				case "directmonstergenrando":#change the enemies a DirectMonsterGen gotten from data[1] spawns to enemies chosen randomly from a tier table based on data[2]
+					{
+					local enemytier = VariousDataTables.enemytables.rawget(data[2]); #array of enemies based on spawn tier
+					local chosenenemy = enemytier[ShockGame.RandRange(0, enemytier.len() - 1)];
+					Property.Set(data[1], "Spawn", "Type 1", chosenenemy);
+					local enemytier = VariousDataTables.enemytables.rawget(data[2]);
+					local chosenenemy = enemytier[ShockGame.RandRange(0, enemytier.len() - 1)];
+					Property.Set(data[1], "Spawn", "Type 2", chosenenemy);
+					local enemytier = VariousDataTables.enemytables.rawget(data[2]);
+					local chosenenemy = enemytier[ShockGame.RandRange(0, enemytier.len() - 1)];
+					Property.Set(data[1], "Spawn", "Type 3", chosenenemy);
+					local enemytier = VariousDataTables.enemytables.rawget(data[2]);
+					local chosenenemy = enemytier[ShockGame.RandRange(0, enemytier.len() - 1)];
+					Property.Set(data[1], "Spawn", "Type 4", chosenenemy);
+					Property.Set(data[1], "Spawn", "Rarity 1", 25);
+					Property.Set(data[1], "Spawn", "Rarity 2", 25);
+					Property.Set(data[1], "Spawn", "Rarity 3", 25);
+					Property.Set(data[1], "Spawn", "Rarity 4", 25);
 					continue;
-				case "monstercontainsaplocation":#switch an item[3](if it isnt 0) a monster[1] contains with an APlocation with id[2]
+					}
+				case "monstercontainsaplocation":#add an APlocation with id[2] to a monster[1] and delete [3] if it isn't 0
+					{
 					local NewAPLocation =  Object.Create("APLocation");
 					Property.Set(NewAPLocation, "VoiceIdx", "", data[2]);
-					Link.Create("Target", NewTracker, NewAPLoc); #Link to object, EveryLoad send a message called CollectedItemsUpdate to whatever the tracker is linked to with the data being the sent items string
+					Link.Create("Mutate", NewTracker, NewAPLocation); #Link to object, EveryLoad send a message called CollectedItemsUpdate to whatever the tracker is linked to with the data being the sent items string
 					Link.Create("Contains", data[1], NewAPLocation);
 					if(data[3])
 						Object.Destroy(data[3]);
 					continue;
+					}
 				}
 		}
 	}
 
 	function OnItemsUnrestrticted()
 	{
+		Property.SetSimple(self, "AI_PtrlRnd", FALSE);
 		SetOneShotTimer("ItemReceiver", 1);
 	}
 
 	function PickUnhackedReplItem()
 	{
-		local randitemnum = rand() % 116;
+		local randitemnum = ShockGame.RandRange(0, 115);
 		local price = 0;
-		if (randitemname >= 0 && randitemname <= 29)
-			price = (rand() % 5) + 2; #number-1 after % is range of price, number after + is minimum price.  so this one has a range of 2-6
-		if (randitemname >= 30 && randitemname <= 52)
-			price = (rand() % 16) + 25;
-		if (randitemname >= 53 && randitemname <= 85)
-			price = (rand() % 41) + 50;
-		if (randitemname >= 86 && randitemname <= 99)
-			price = (rand() % 41) + 80;
-		if (randitemname >= 100 && randitemname <= 115)
-			price = (rand() % 61) + 90;
+		if (randitemnum >= 0 && randitemnum <= 29)
+			price = ShockGame.RandRange(2, 6);
+		if (randitemnum >= 30 && randitemnum <= 52)
+			price = ShockGame.RandRange(25, 40);
+		if (randitemnum >= 53 && randitemnum <= 85)
+			price = ShockGame.RandRange(50, 90);
+		if (randitemnum >= 86 && randitemnum <= 99)
+			price = ShockGame.RandRange(80, 120);
+		if (randitemnum >= 100 && randitemnum <= 115)
+			price = ShockGame.RandRange(90, 150);
 		return [VariousDataTables.UnhackedReplItems[randitemnum], price];
 	}
 
 	function PickHackedReplItem()
 	{
-		local randitemnum = rand() % 116;
+		local randitemnum = ShockGame.RandRange(0, 115);
 		local price = 0;
-		if (randitemname >= 0 && randitemname <= 26)
-			price = (rand() % 21) + 15;
-		if (randitemname >= 27 && randitemname <= 64)
-			price = (rand() % 31) + 35;
-		if (randitemname >= 65 && randitemname <= 96)
-			price = (rand() % 51) + 55;
-		if (randitemname >= 97 && randitemname <= 110)
-			price = (rand() % 66) + 75;
-		if (randitemname >= 112 && randitemname <= 115)
-			price = (rand() % 51) + 125;
+		if (randitemnum >= 0 && randitemnum <= 26)
+			price = ShockGame.RandRange(15, 35);
+		if (randitemnum >= 27 && randitemnum <= 64)
+			price = ShockGame.RandRange(35, 65);
+		if (randitemnum >= 65 && randitemnum <= 96)
+			price = ShockGame.RandRange(55, 105);
+		if (randitemnum >= 97 && randitemnum <= 110)
+			price = ShockGame.RandRange(75, 140);
+		if (randitemnum >= 112 && randitemnum <= 115)
+			price = ShockGame.RandRange(125, 175);
 		return [VariousDataTables.HackedReplItems[randitemnum], price];
 	}
 
@@ -267,51 +309,61 @@ class PlayerScripts extends SqRootScript
 			local curmap = string();
 			Version.GetMap(curmap);
 			curmap = curmap.tostring();
-			local settings = ParseFile("DMM\\Testing\\data\\Settings.txt");
+			local settings = ParseFile("DMM\\Archipelago\\data\\Settings.txt");
+			local runseed = split(settings, ",")[0].tointeger();
 			if (!settings)
 				{
 				ShockGame.AddText("You aren't connected to a slot with the client.  Open the client, connect, and reload.  If you are connected then the settings file failed to be read.", self);
 				return;
 				}
-			if (curmap == "earth.mis" && !Object.FindClosestObjectNamed(Networking.FirstPlayer(), "APLocationTracker"))
+			#if (curmap == "earth.mis" && !Object.FindClosestObjectNamed(Networking.FirstPlayer(), "APLocationTracker")) #uncomment this when done testing
 				{
 				Property.SetSimple(self, "Modify1", settings); #store the settings
-				local runseed = split(settings, ",")[0].tointeger();
-				Property.SetSimple(self, "CurWpnDmg", runseed);
-				Property.SetSimple(self, "BaseWpnDmg", 0); #StoredItemsReceived could just be changed to the amount of items received
+				Property.SetSimple(self, "CurWpnDmg", runseed); #storedseed
+				Property.SetSimple(self, "BaseWpnDmg", 1); #StoredItemsReceived could just be changed to the amount of items received
+				Property.SetSimple(self, "AI_PtrlRnd", TRUE); #Whether player has not left airlock
 
 				if (settings.find("Stats"))
 					{
-					Property.SetSimple(self, "ObjBrokenIcon", "");
+					Property.SetSimple(self, "LockMsg", "");
+					local shoparray = "";
 					for (local i = 1000; i < 1139; i++)
-						Property.SetSimple(self, "ObjBrokenIcon", Property.Get(self, "ObjBrokenIcon") + i + "," + (ceil((i - 1000) / 21) + 2) + ","); #The list of items purchasable from the location shop, costs increase the more you buy.  i is the locid.
+						shoparray += i + "," + (ceil((i - 1000) / 21) + 2) + ","; #The list of items purchasable from the location shop, costs increase the more you buy. i is the locid.
+					Property.SetSimple(self, "LockMsg", shoparray);
 					}
 				}
-			if (!Property.Get(self, "CurWpnDmg") == split(settings, ",")[0].tointeger) #check seed is the same
+			local storedseed = Property.Get(self, "CurWpnDmg");
+			if (runseed != storedseed)
 				{
 				ShockGame.AddText("You are connected to the wrong slot, connect to the correct slot and reload.", self);
 				return;
 				}
-			if (!(curmap == "earth.mis" || curmap == "station.mis" || curmap == "medsci1.mis" && Object.FindClosestObjectNamed(Networking.FirstPlayer(), "itemrestrictor"))) #cant let items spawn in places you can't backtrack to.
-				SetOneShotTimer("ItemReceiver", 1);
 			if (!Object.FindClosestObjectNamed(Networking.FirstPlayer(), "APLocationTracker"))
 				FirstLoad(curmap);
-			Link.BroadcastOnAllLinksData(Object.FindClosestObjectNamed(Networking.FirstPlayer(), "APLocationTracker"), "CollectedItemsUpdate", "Target", ParseFile("DMM\\Testing\\data\\SentItems.txt"));
+			if (!(curmap == "earth.mis" || curmap == "station.mis" || curmap == "medsci1.mis" && Property.Get(self,"AI_PtrlRnd"))) #cant let items spawn in places you can't backtrack to.
+				SetOneShotTimer("ItemReceiver", 1);
+			Link.BroadcastOnAllLinksData(Object.FindClosestObjectNamed(Networking.FirstPlayer(), "APLocationTracker"), "CollectedItemsUpdate", "Mutate", ParseFile("DMM\\Archipelago\\data\\SentItems.txt"));
 			# ^ tells APLocations to delete themselves if they have already been collected.
 		}
 
 		if (message().name == "ItemReceiver")
 		{
-			local itemsreceived = split(ParseFile("DMM\\Testing\\data\\ReceivedItems.txt"), ",");
+			local ReceivedItemsfile = ParseFile("DMM\\Archipelago\\data\\ReceivedItems.txt")
+			if (ReceivedItemsfile == null)
+				{
+					ShockGame.AddText("RecievedItemsfile could not be read or is empty.  Open the client and connect to a slot.", self)
+					return;
+				}
+			local itemsreceived = split(ReceivedItemsfile, ",");
 			local storeditemsreceivedcount = Property.Get(self, "BaseWpnDmg");
-			local receiveditems = itemsreceived.slice(storeditemsreceivedcount.len()); #check if length of itemsreceived is larger than storeditemsreceivedcount, if so spawn the new items.
+			local receiveditems = itemsreceived.slice(storeditemsreceivedcount); #check if length of itemsreceived is larger than storeditemsreceivedcount, if so spawn the new items.
 			foreach (itemid in receiveditems)
 				ItemReceived(itemid);
 			SetOneShotTimer("ItemReceiver", 1);
 		}
 	}
 
-	function CopyMetaProp(oldenemy, newenemy, metaprop)#From Sarge945s Rando
+	static function CopyMetaProp(oldenemy, newenemy, metaprop)#From Sarge945s Rando
 	{
 		if (Object.HasMetaProperty(oldenemy, metaprop))
 			Object.AddMetaProperty(newenemy, metaprop);
@@ -352,44 +404,59 @@ class PlayerScripts extends SqRootScript
 		switch (item[0])
 		{
 		case "StatUpgrade":
+			{
 			Property.Set(self, "BaseStatsDesc", item[1], Property.Get(self, "BaseStatsDesc", item[1]) + 1);
 			break;
+			}
 		case "TechUpgrade":
+			{
 			Property.Set(self, "BaseTechDesc", item[1], Property.Get(self, "BaseTechDesc", item[1]) + 1);
 			break;
+			}
 		case "WeaponUpgrade":
+			{
 			Property.Set(self, "BaseWeaponDesc", item[1], Property.Get(self, "BaseWeaponDesc", item[1]) + 1);
 			break;
+			}
 		case "PsiPowerUnlock": #tiers 1-4
-			Property.setSimple(self, "PsiPowerDesc", Property.Get(self, "PsiPowerDesc") + pow(item[1] - 1, 2));
+			{
+			Property.SetSimple(self, "PsiPowerDesc", Property.Get(self, "PsiPowerDesc") + pow(2, item[1] - 1));
+			print(Property.Get(self, "PsiPowerDesc"))
 			break;
+			}
 		case "PsiPowerUnlock2": #tier 5
-			Property.setSimple(self, "PsiPower2Desc", Property.Get(self, "PsiPower2Desc") + pow(item[1] - 1, 2));
+			{
+			Property.SetSimple(self, "PsiPower2Desc", Property.Get(self, "PsiPower2Desc") + pow(2, item[1] - 1));
+			print(Property.Get(self, "PsiPower2Desc"))
 			break;
+			}
 		case "OsUnlock":
-			if (Property.Get(self, "TraitsDesc", "Trait 1" == 0))
+			{
+			if (Property.Get(self, "TraitsDesc", "Trait 1") == 0)
 				{
 				Property.Set(self, "TraitsDesc", "Trait 1", item[1]);
 				break;
 				}
-			if (Property.Get(self, "TraitsDesc", "Trait 2" == 0))
+			if (Property.Get(self, "TraitsDesc", "Trait 2") == 0)
 				{
 				Property.Set(self, "TraitsDesc", "Trait 2", item[1]);
 				break;
 				}
-			if (Property.Get(self, "TraitsDesc", "Trait 3" == -1))
+			if (Property.Get(self, "TraitsDesc", "Trait 3") == 0)
 				{
 				Property.Set(self, "TraitsDesc", "Trait 3", item[1]);
 				break;
 				}
-			if (Property.Get(self, "TraitsDesc", "Trait 4" == -1))
+			if (Property.Get(self, "TraitsDesc", "Trait 4") == 0)
 				{
 				Property.Set(self, "TraitsDesc", "Trait 4", item[1]);
 				break;
 				}
 			print("An OS upgrade was attempted to be obtained while all slots are full.")
 			break;
+			}
 		default:
+			{
 			local newitem = Object.Create(item[0]);
 			local properties = item[1];
 				foreach(property in properties){
@@ -399,6 +466,7 @@ class PlayerScripts extends SqRootScript
 						Property.SetSimple(newitem, property[0], property[1]);
 				}
 			Object.Teleport(newitem, Object.Position(self), Object.Facing(self));
+			}
 		}
 	}
 

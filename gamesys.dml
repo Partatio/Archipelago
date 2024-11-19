@@ -33,6 +33,23 @@ CreateArch "Goodies" "APLocation"
 	{
 	"" 0
 	}
+	+ObjProp "ObjIcon"
+	{
+	"" "iplant1"
+	}
+	+ObjProp "InvDims"
+	{
+	"Width"	1
+	"Height" 1
+	}
+	+ObjProp "ObjName"
+	{
+	"" "APLocation: "An APLocation""
+	}
+	+ObjProp "PhysAttr"
+	{
+	"Gravity %" 5
+	}
 }
 
 CreateArch "Misc Metaprops" "APLocationScripts"
@@ -59,6 +76,10 @@ CreateArch "APLocation" "APLLovesense1"
 	{
 	"" 1901
 	}
+	+ObjProp "ObjShort"
+	{
+	"" "APLLovesense1: "Lovesense APLocation 1, purchase once""
+	}
 }
 
 CreateArch "APLocation" "APLLovesense2"
@@ -66,6 +87,10 @@ CreateArch "APLocation" "APLLovesense2"
 	+ObjProp "VoiceIdx"
 	{
 	"" 1902
+	}
+	+ObjProp "ObjShort"
+	{
+	"" "APLLovesense2: "Lovesense APLocation 2, purchase once""
 	}
 }
 
@@ -75,6 +100,10 @@ CreateArch "APLocation" "APLLovesense3"
 	{
 	"" 1903
 	}
+	+ObjProp "ObjShort"
+	{
+	"" "APLLovesense3: "Lovesense APLocation 3, purchase once""
+	}
 }
 
 CreateArch "APLocation" "APLLovesense4"
@@ -82,6 +111,22 @@ CreateArch "APLocation" "APLLovesense4"
 	+ObjProp "VoiceIdx"
 	{
 	"" 1904
+	}
+	+ObjProp "ObjShort"
+	{
+	"" "APLLovesense4: "Lovesense APLocation 4, purchase once""
+	}
+}
+
+CreateArch "APLocation" "APLCommand1"
+{
+	+ObjProp "VoiceIdx"
+	{
+	"" 1905
+	}
+	+ObjProp "ObjShort"
+	{
+	"" "APLCommand1: "Command1 APLocation, purchase once""
 	}
 }
 
@@ -118,3 +163,46 @@ CreateArch "Misc Metaprops" "itemrestrictorscripts"
 	}
 }
 +MetaProp "itemrestrictor" "itemrestrictorscripts"
+
+
+
+//RoSoDudes repairable crates
+////Make Hackable Crates repairable after critically failing a hack
+//First disable explosion by intercepting script messages
++ObjProp -1886 "Scripts" //Hackable Crate
+{
+    "Script 0" "rsdHackableCrate" //was HackableCrate
+    "Script 1" "NVSimpleRepair"
+    "Script 2" "HackableCrate"
+}
+//Then setup repair minigame difficulty
++ObjProp -1886 "ReqTechDesc" //Hackable Crate
+{
+    "Repair" 1
+}
++ObjProp -1886 "RepairDiff" //Hackable Crate
+{
+    "Success %" 20
+    "Critical Fail %" 0 //WARNING: putting any ICE nodes here will result in the object disappearing on critfail with no explosion!
+    "Cost" 4.00
+}
++ObjProp -420 "ReqTechDesc" //SuperCrate
+{
+    "Repair" 1
+}
++ObjProp -420 "RepairDiff" //SuperCrate
+{
+    "Success %" -10
+    "Critical Fail %" 0 //WARNING: putting any ICE nodes here will result in the object disappearing on critfail with no explosion!
+    "Cost" 4.00
+}
+
+
+
+//Sarge945s No Keypad Cheese
+//Attach Keypad Script to all keypads
+//They have don't inherit set, so we need to add it to the archetype manually.
++ObjProp -258 "Scripts"
+{
+    "Script 2" "sargeRandomKeypad"
+}

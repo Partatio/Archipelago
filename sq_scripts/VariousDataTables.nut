@@ -16,32 +16,100 @@ class VariousDataTables extends SqRootScript
 //example "skipstation": ["NoStats"]
 //"lovesense" = change objects in lovesense machine to APLocations with set ids which are changeable in the gamesys
 //example "lovesense": ["None"]
-//"slayvictoryprop" = add script to script 3 that on slay sends victory loc. many obj id is 253(i think) and shodan is 298
+//"command1repl": #changes command1s first hacked item to a location, this is to replace the resonator.  id changeable in gamesys
+//example "command1repl": ["None"]
+//"slayvictoryprop" = add script to script 3 that on slay sends victory loc. many obj id is 253 and shodan is 298
 //example "slayvictoryprop": ["Many", 253]
-//"medsci1trip" = Place a tripwire after the airlock that destroys itself by linking to a destroy trap, the itemreceiving thread on medsci 1 doesnt run until this tripwire is destroyed
-//example "medsci1trip": ["None"]
+//"itemrestrictorapl" = #creates an APLocation with the name itemrestrictor in location data[1], with Locid data[2], and a script that sends a message to the player to start sending items.  does not link to APlocationTracker.  Used on medsci1 to stop items from spawning.
+//example "itemrestrictorapl": ["None", vector(42, -99, -16), 51]
 //"randomizerepl" = Randomize the contents and prices of a replicator
 //example "randomizerepl": ["None", 116]
 //"medsci1replpsihypo" = Replace the first object in medsci1's repl in the circular hub with a psi hypo to avoid softlocks. (hacked and unhacked)
 //example "medsci1replpsihypo": ["None"]
-//"newgame" = run on newgame to store settings and other info
-//example "newgame": ["None"]
 //"skipearth" = teleport player at start of game to one of the agencies skipping the first level, if tutorial is on dont do this
 //example "skipearth": ["NoTutorial"]
-//"randomizeenemy" = destroy data[1] enemy if that field isnt set to 0.  Get the correct tier array based on data[2].  choose a random enemy from that, then create it and teleport it to data[3] with the original enemies facing if there was one.
+//"randomizeenemy" = destroy data[1] enemy if that field isnt set to 0.  Get the correct tier array based on data[2](string).  choose a random enemy from that, then create it and teleport it to data[3] with the original enemies facing if there was one.
 //example "randomizeenemy": ["none", 12, "2", vector(23, 8, 12)]
-//"directmonstergenrando" = change the enemy a DirectMonsterGen gotten from data[1] spawns to an enemy chosen randomly from a tier table based on data[2]
+//"directmonstergenrando" = change enemies a DirectMonsterGen gotten from data[1] spawns to enemies chosen randomly from a tier table based on data[2]
 //example "directmonstergenrando": ["None", 854, "5"]
-//"monstercontainsaplocation" = #switch an item[3](if it isnt 0) a monster[1] contains with an APlocation with id[2]
+//"monstercontainsaplocation" = #add an APlocation with id[2] to a monster[1] and delete [3] if it isn't 0
 //example "monstercontainsaplocation": ["None", 25, 67, 43]
 
 mapinstructions =
 {
     "earth.mis": {
-        "placeaploc": ["None", vector(-26.7165, -28.2592, 4.27442), 13, 0],
-        "destroy": ["None", 187]
+
     }
+    "station.MIS": {
+
+    }
+    "MedSci1.MIS": {
+
+    }
+    "medsci2.MIS": {
+
+    }
+    "eng1.MIS": {
+
+    }
+    "eng2.MIS": {
+
+    }
+    "hydro2.MIS": {
+
+    }
+    "hydro1.MIS": {
+
+    }
+    "hydro2.MIS": {
+
+    }
+    "ops2.MIS": {
+
+    }
+    "ops1.MIS": {
+
+    }
+    "ops3.MIS": {
+
+    }
+    "ops4.MIS": {
+
+    }
+    "Rec1.MIS": {
+
+    }
+    "rec2.MIS": {
+
+    }
+    "rec3.MIS": {
+
+    }
+    "commmand1.MIS": {
+
+    }
+    "command2.MIS": {
+
+    }
+    "rick1.MIS": {
+
+    }
+    "Rick2.MIS": {
+
+    }
+    "Rick3.MIS": {
+
+    }
+    "Many.MIS": {
+
+    }
+    "shodan.MIS": {
+
+    }
+
+    #testmaps
     "medsci1.mis": {
+
     }
 }
 
@@ -773,6 +841,18 @@ ItemTable = {
     #medsci1
     "12": ["Big Nanite Pile", [["StackCount", 239], ["Scale", vector(3.00, 0.50, 1.00)], ["LightColor", "hue", 8.3]]],
     "239": ["Standard Clip", []],
+    "16": ["StatUpgrade", "AGI"],
+    "90": ["TechUpgrade", "Repair"],
+    "20": ["WeaponUpgrade", "Energy"],
+    "50": ["PsiPowerUnlock", 9]
+    "51": ["PsiPowerUnlock", 10]
+    "60": ["PsiPowerUnlock2", 1]
+    "61": ["PsiPowerUnlock2", 3]
+    "62": ["OsUnlock", 1]
+    "63": ["OsUnlock", 5]
+    "64": ["OsUnlock", 7]
+    "65": ["OsUnlock", 2]
+    "66": ["OsUnlock", 4]
     #medsci2
     }
 }

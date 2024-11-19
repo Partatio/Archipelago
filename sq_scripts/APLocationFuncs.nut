@@ -12,3 +12,11 @@ class APLocationFuncs extends SqRootScript
             Object.Destroy(self);
     }
 }
+
+class ItemUnrestrict extends SqRootScript
+{
+    function OnFrobWorldEnd()
+    {
+        SendMessage(Networking.FirstPlayer(), "ItemsUnrestrticted");
+    }
+}
