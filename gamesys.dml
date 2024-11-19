@@ -151,19 +151,6 @@ CreateArch "Misc Metaprops" "CybModShopScripts"
 }
 +MetaProp "CybModShop" "CybModShopScripts"
 
-CreateArch "Tripwire" "itemrestrictor"
-{
-}
-
-CreateArch "Misc Metaprops" "itemrestrictorscripts"
-{
-	+ObjProp "Scripts" 
-	{
-	"Script 0" "itemrestrictorfuncs"
-	}
-}
-+MetaProp "itemrestrictor" "itemrestrictorscripts"
-
 
 
 //RoSoDudes repairable crates
