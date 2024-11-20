@@ -17,6 +17,6 @@ class ItemUnrestrict extends SqRootScript
 {
     function OnFrobWorldEnd()
     {
-        SendMessage(Networking.FirstPlayer(), "ItemsUnrestrticted");
+        SendMessage(Networking.FirstPlayer(), "ItemsUnrestricted");
     }
 }

@@ -257,7 +257,7 @@ class PlayerScripts extends SqRootScript
 		}
 	}
 
-	function OnItemsUnrestrticted()
+	function OnItemsUnrestricted()
 	{
 		Property.SetSimple(self, "AI_PtrlRnd", FALSE);
 		SetOneShotTimer("ItemReceiver", 1);
